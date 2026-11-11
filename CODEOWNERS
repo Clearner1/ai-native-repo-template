@@ -1,0 +1,15 @@
+# Sensitive surfaces require explicit human sign-off.
+# Replace @Clearner1 with your organization's human maintainers team after cloning.
+
+# Governance, CI gates, and verification scripts (agents cannot rewrite their own grading rules)
+/.github/                  @Clearner1
+/AGENTS.md                 @Clearner1
+/CODEOWNERS                @Clearner1
+/scripts/verify/           @Clearner1
+
+# Domain invariants, schema migrations, and security boundaries
+/docs/contracts/           @Clearner1
+/migrations/               @Clearner1
+/**/migrations/            @Clearner1
+/**/auth/                  @Clearner1
+/**/security/              @Clearner1

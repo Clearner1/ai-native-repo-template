@@ -1,0 +1,22 @@
+# OS & Editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Multi-agent local worktrees & scratch artifacts
+.worktrees/
+.scratch/
+*.tmp
+*.log
+
+# Common language build & dependency outputs
+node_modules/
+dist/
+build/
+target/
+.venv/
+__pycache__/
+*.pyc
+coverage/

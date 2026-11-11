@@ -1,0 +1,49 @@
+name: Agent Governance Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  governance-gate:
+    name: Repository & PR Contract Gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout candidate branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout authoritative gate scripts from default branch on PRs
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch origin "${{ github.event.repository.default_branch }}" --depth=1
+          mkdir -p /tmp/trusted-gate
+          git show "origin/${{ github.event.repository.default_branch }}:scripts/verify/repo-gate.sh" > /tmp/trusted-gate/repo-gate.sh
+          git show "origin/${{ github.event.repository.default_branch }}:scripts/verify/pr-contract-check.sh" > /tmp/trusted-gate/pr-contract-check.sh
+          chmod +x /tmp/trusted-gate/*.sh
+
+      - name: Run repository structure & governance gate
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            /tmp/trusted-gate/repo-gate.sh
+          else
+            ./scripts/verify/repo-gate.sh
+          fi
+
+      - name: Validate Pull Request contract & Reverse Verification evidence
+        if: github.event_name == 'pull_request'
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          PR_FILE="$(mktemp)"
+          printf '%s\n' "$PR_BODY" > "$PR_FILE"
+          /tmp/trusted-gate/pr-contract-check.sh "$PR_FILE" "$BASE_SHA" "$HEAD_SHA"
