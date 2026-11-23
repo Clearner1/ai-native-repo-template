@@ -1,0 +1,52 @@
+---
+name: Boundary Refactor Proposal
+description: Propose a refactor when seam collisions or bug clusters signal a boundary problem
+title: "[refactor] "
+labels: ["refactor", "architecture"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template when:
+        - Multiple agents repeatedly hit merge conflicts on the same file
+        - Bugs cluster in one module
+        - A seam collision signals a missing contract
+
+        See AGENTS.md Iron Rule §5 (Seam Collisions & Bug Clusters Mean Refactor).
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence of boundary problem
+      description: |
+        What merge conflicts, bug clusters, or seam collisions prompted this proposal?
+        Cite specific PRs, issues, or file paths.
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current boundary
+      description: How is the code currently organized? What are the responsibilities?
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed boundary
+      description: How should it be reorganized? What responsibilities move where?
+    validations:
+      required: true
+  - type: textarea
+    id: migration
+    attributes:
+      label: Migration path
+      description: How do we get from current to proposed without breaking existing contracts?
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification
+      description: How will you prove the new boundary is correct? What contracts/guards enforce it?
+    validations:
+      required: false

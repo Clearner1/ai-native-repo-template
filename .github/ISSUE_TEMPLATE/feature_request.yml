@@ -1,0 +1,39 @@
+---
+name: Feature / Enhancement
+description: Propose a new feature or improvement with a Triangle Contract
+title: "[feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before proposing, check `docs/decisions/` for prior rejected alternatives.
+        Load `.agents/skills/feature-contract/SKILL.md` for the Triangle Contract workflow.
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: What should the user/agent be able to do after this change?
+    validations:
+      required: true
+  - type: textarea
+    id: invariants
+    attributes:
+      label: Invariants & failure modes
+      description: What must remain true? What error states can occur?
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Falsifiable verification
+      description: How will you prove this works? What test fails without it?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What other approaches did you consider and why were they rejected?
+    validations:
+      required: false
