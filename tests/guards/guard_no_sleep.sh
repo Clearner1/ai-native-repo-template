@@ -40,14 +40,14 @@ TEST_GLOBS=(
   '*_test.rs'
 )
 
-# Violation patterns (ERE). Language-qualified to minimise false positives.
+# Violation patterns (POSIX ERE — no \b or \s, compatible with BSD grep).
 PATTERNS=(
-  'time\.Sleep\('          # Go
-  'time\.sleep\('          # Python (qualified)
-  'asyncio\.sleep\('       # Python async
-  'Thread\.sleep\('        # Java / Kotlin
-  'thread::sleep\('        # Rust
-  '\bsleep\s*\([0-9]'      # C / shell / Ruby bare sleep with a numeric arg
+  'time\.Sleep\('                   # Go
+  'time\.sleep\('                   # Python (qualified)
+  'asyncio\.sleep\('                # Python async
+  'Thread\.sleep\('                 # Java / Kotlin
+  'thread::sleep\('                 # Rust
+  '(^|[^a-zA-Z_])sleep[[:space:]]*\([0-9]'  # C / shell / Ruby bare sleep(N)
 )
 
 SKIP_PATHS=('.git' 'node_modules' 'vendor' 'third_party' 'site' 'dist' 'build' '.agents' 'testdata')
@@ -62,7 +62,7 @@ FAILURES=0
 
 for glob in "${TEST_GLOBS[@]}"; do
   while IFS= read -r -d '' file; do
-    hits="$(grep -nEP "$combined" "$file" 2>/dev/null || true)"
+    hits="$(grep -nE "$combined" "$file" 2>/dev/null || true)"
     if [ -n "$hits" ]; then
       printf '❌ %s: wall-clock sleep in test file\n' "$file" >&2
       while IFS= read -r line; do

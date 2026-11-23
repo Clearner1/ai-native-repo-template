@@ -63,7 +63,7 @@ FAILURES=0
 
 for glob in "${SOURCE_GLOBS[@]}"; do
   while IFS= read -r -d '' file; do
-    hits="$(grep -nEP "$combined" "$file" 2>/dev/null || true)"
+    hits="$(grep -nE "$combined" "$file" 2>/dev/null || true)"
     if [ -n "$hits" ]; then
       # Second-pass: skip if the same block also contains panic/raise/unreachable
       # within 3 lines of the default. Use awk for context window.

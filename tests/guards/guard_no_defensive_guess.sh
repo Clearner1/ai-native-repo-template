@@ -57,10 +57,10 @@ FAILURES=0
 for glob in "${SOURCE_GLOBS[@]}"; do
   while IFS= read -r -d '' file; do
     # Skip files that opted out with an inline ignore comment
-    if grep -qP '# guard:no-defensive-guess:ignore|// guard:no-defensive-guess:ignore' "$file" 2>/dev/null; then
+    if grep -qE '# guard:no-defensive-guess:ignore|// guard:no-defensive-guess:ignore' "$file" 2>/dev/null; then
       continue
     fi
-    hits="$(grep -nEP "$combined" "$file" 2>/dev/null || true)"
+    hits="$(grep -nE "$combined" "$file" 2>/dev/null || true)"
     if [ -n "$hits" ]; then
       printf '❌ %s: speculative multi-fallback field access\n' "$file" >&2
       while IFS= read -r line; do
