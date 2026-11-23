@@ -1,7 +1,7 @@
 # AX-Friendly Repository Entrypoints
 # Every command prints actionable errors with a `Next action:` recovery step.
 
-.PHONY: help gate check-pr new-changeset worktree test mutate guards
+.PHONY: help gate check-pr new-changeset worktree test mutate guards ci
 
 help:
 	@echo "Available targets:"
@@ -11,6 +11,8 @@ help:
 	@echo "  make worktree AGENT=<name> TOPIC=<t>   Create an isolated git worktree on branch agent/<name>/<t>"
 	@echo "  make test                              Hook for your language test suite (replace in your project)"
 	@echo "  make mutate                            Hook for your mutation testing runner (replace in your project)"
+	@echo "  make guards                            Run all guard tests from tests/guards/"
+	@echo "  make ci                                Full CI suite: gate + guards + lessons-check (mirrors GitHub Actions)"
 
 gate:
 	@./scripts/verify/repo-gate.sh
@@ -38,3 +40,6 @@ guards:
 
 mutate:
 	@echo "Info: wire your mutation testing tool here (e.g., cargo-mutants, mutmut, Stryker, pitest) for core domain modules."
+
+ci:
+	@./scripts/verify/repo-gate.sh && bash tests/guards/run_all.sh && ./scripts/verify/lessons-check.sh
