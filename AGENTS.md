@@ -72,6 +72,7 @@ Load the matching `SKILL.md` **before** starting the corresponding workflow:
 - **`peer-review-protocol`** (`.agents/skills/peer-review-protocol/SKILL.md`) — Independent blind review rules, Tier-1 vs. Tier-2 risk routing, 3-round review cap, and concrete behavior-break bar for `HOLD` verdicts.
 - **`release-changeset`** (`.agents/skills/release-changeset/SKILL.md`) — Authoring conflict-free changeset fragments, rolling up versioned release notes, and T-30m / T+24h trace readback squares.
 - **`api-contract-sync`** (`.agents/skills/api-contract-sync/SKILL.md`) — Pinning upstream contract SHAs, enforcing schema oracles, and eliminating defensive field guessing across services/clients.
+- **`lessons-retrospective`** (`.agents/skills/lessons-retrospective/SKILL.md`) — Periodic post-merge commit retrospectives, updating `LESSONS.md` (`Seen N×`), and executing the `3×` promotion pipeline into `docs/code-standards.md` and mechanical guards.
 
 ---
 
