@@ -1,0 +1,52 @@
+---
+name: Bug Report
+description: Report a defect with evidence for the Red→Green workflow
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing, search existing issues. If the bug has an open issue,
+        read it to its last comment and add evidence there instead.
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Observed behavior
+      description: What happened? Include the exact surface (CLI, GUI, API), inputs, and outputs.
+      placeholder: "When I run `make gate` with a LESSONS.md that has no cursor, it passes instead of failing."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should have happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands, inputs, and config to reproduce the issue.
+      placeholder: |
+        1. Remove the `<!-- reviewed-through: ... -->` line from LESSONS.md
+        2. Run `make gate`
+        3. Gate passes (should fail)
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, shell, language runtime version, relevant tool versions.
+      placeholder: "macOS 15.1, bash 5.2, make 4.4"
+    validations:
+      required: false
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Paste logs, screenshots, or error output that shows the defect.
+    validations:
+      required: false
