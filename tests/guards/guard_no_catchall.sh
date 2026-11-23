@@ -46,7 +46,7 @@ SOURCE_GLOBS=('*.go' '*.py' '*.ts' '*.js' '*.java' '*.kt' '*.rs' '*.cs')
 PATTERNS=(
   'default:\s*(//\s*(ignore|noop|never|todo|fixme|ok|fine|safe))'  # commented-away
   'default:\s*$'                                                     # bare default: (needs context check below)
-  'default:[^$\n]*[^)]$'                                              # single-line default: return/break/pass (escapes bare-default pattern)
+  'default:[[:space:]]+(return|break|continue|pass)([[:space:]]|;|$)'  # single-line default: return/break/pass/continue
   'case _:'                                                           # Go wildcard swallowing unknown
   '^\s*else:\s*$'                                                    # bare else: (Python)
   '^\s*else:\s*#\s*(ignore|noop|never|todo|fixme|ok|fine|safe)'    # commented-away Python else

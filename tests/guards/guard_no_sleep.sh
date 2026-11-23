@@ -49,8 +49,7 @@ PATTERNS=(
   'Thread\.sleep\('                           # Java / Kotlin
   'thread::sleep\('                           # Rust
   '(^|[^a-zA-Z_])sleep[[:space:]]*\([0-9]'  # C / shell / Ruby bare sleep(N)
-  # Alias import bypass: `from time import sleep as s; s(1)` caught by bare sleep(N) above
-  # Additional: detect re-exported alias used as sleep\(  — covered by bare sleep\([0-9]
+  'from[[:space:]]+time[[:space:]]+import[[:space:]]+sleep'  # Python alias import: from time import sleep [as ...]
 )
 
 SKIP_PATHS=('.git' 'node_modules' 'vendor' 'third_party' 'site' 'dist' 'build' '.agents' 'testdata/should_fail')
