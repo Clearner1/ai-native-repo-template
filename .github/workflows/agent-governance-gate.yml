@@ -10,6 +10,10 @@ permissions:
   contents: read
   pull-requests: read
 
+concurrency:
+  group: governance-gate-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   governance-gate:
     name: Repository & PR Contract Gate
@@ -17,19 +21,23 @@ jobs:
     steps:
       - name: Checkout candidate branch
         uses: actions/checkout@v4
+        timeout-minutes: 5
         with:
           fetch-depth: 0
 
       - name: Checkout authoritative gate scripts from default branch on PRs
         if: github.event_name == 'pull_request'
+        timeout-minutes: 5
         run: |
           git fetch origin "${{ github.event.repository.default_branch }}" --depth=1
           mkdir -p /tmp/trusted-gate
           git show "origin/${{ github.event.repository.default_branch }}:scripts/verify/repo-gate.sh" > /tmp/trusted-gate/repo-gate.sh
           git show "origin/${{ github.event.repository.default_branch }}:scripts/verify/pr-contract-check.sh" > /tmp/trusted-gate/pr-contract-check.sh
+          git show "origin/${{ github.event.repository.default_branch }}:scripts/verify/lessons-check.sh" > /tmp/trusted-gate/lessons-check.sh
           chmod +x /tmp/trusted-gate/*.sh
 
       - name: Run repository structure & governance gate
+        timeout-minutes: 10
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             /tmp/trusted-gate/repo-gate.sh
@@ -39,6 +47,7 @@ jobs:
 
       - name: Validate Pull Request contract & Reverse Verification evidence
         if: github.event_name == 'pull_request'
+        timeout-minutes: 5
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
@@ -47,3 +56,16 @@ jobs:
           PR_FILE="$(mktemp)"
           printf '%s\n' "$PR_BODY" > "$PR_FILE"
           /tmp/trusted-gate/pr-contract-check.sh "$PR_FILE" "$BASE_SHA" "$HEAD_SHA"
+
+      - name: Run guard tests
+        timeout-minutes: 10
+        run: bash tests/guards/run_all.sh
+
+      - name: Check lessons registry
+        timeout-minutes: 5
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            /tmp/trusted-gate/lessons-check.sh
+          else
+            ./scripts/verify/lessons-check.sh
+          fi
