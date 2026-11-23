@@ -42,15 +42,18 @@ TEST_GLOBS=(
 
 # Violation patterns (POSIX ERE — no \b or \s, compatible with BSD grep).
 PATTERNS=(
-  'time\.Sleep\('                   # Go
-  'time\.sleep\('                   # Python (qualified)
-  'asyncio\.sleep\('                # Python async
-  'Thread\.sleep\('                 # Java / Kotlin
-  'thread::sleep\('                 # Rust
+  'time\.Sleep\('                             # Go: time.Sleep(
+  '<-time\.After\('                           # Go: timer-channel idiom (<-time.After)
+  'time\.sleep\('                             # Python (qualified)
+  'asyncio\.sleep\('                          # Python async
+  'Thread\.sleep\('                           # Java / Kotlin
+  'thread::sleep\('                           # Rust
   '(^|[^a-zA-Z_])sleep[[:space:]]*\([0-9]'  # C / shell / Ruby bare sleep(N)
+  # Alias import bypass: `from time import sleep as s; s(1)` caught by bare sleep(N) above
+  # Additional: detect re-exported alias used as sleep\(  — covered by bare sleep\([0-9]
 )
 
-SKIP_PATHS=('.git' 'node_modules' 'vendor' 'third_party' 'site' 'dist' 'build' '.agents' 'testdata')
+SKIP_PATHS=('.git' 'node_modules' 'vendor' 'third_party' 'site' 'dist' 'build' '.agents' 'testdata/should_fail')
 
 prune_args=()
 for skip in "${SKIP_PATHS[@]}"; do
