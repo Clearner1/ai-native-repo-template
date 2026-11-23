@@ -44,7 +44,7 @@ PATTERNS=(
   '\b\w+\.get\("[^"]+"\)\s+or\s+\w+\.get\("' # Python chained .get or .get
 )
 
-SKIP_PATHS=('.git' 'node_modules' 'vendor' 'third_party' 'site' 'dist' 'build' '.agents' 'testdata')
+SKIP_PATHS=('.git' 'node_modules' 'vendor' 'third_party' 'site' 'dist' 'build' '.agents' 'testdata/should_fail')
 
 prune_args=()
 for skip in "${SKIP_PATHS[@]}"; do
@@ -57,10 +57,13 @@ FAILURES=0
 for glob in "${SOURCE_GLOBS[@]}"; do
   while IFS= read -r -d '' file; do
     # Skip files that opted out with an inline ignore comment
-    if grep -qE '# guard:no-defensive-guess:ignore|// guard:no-defensive-guess:ignore' "$file" 2>/dev/null; then
-      continue
-    fi
-    hits="$(grep -nE "$combined" "$file" 2>/dev/null || true)"
+    # Line-level ignore (narrower than file-level): skip only annotated lines.
+    # File-level ignore was removed (red-team finding: a single header line
+    # could suppress the entire file). Use line-level instead:
+    #   payload.userId ?? payload.user_id  # guard:no-defensive-guess:ignore
+    hits="$(grep -nE "$combined" "$file" 2>/dev/null \
+      | grep -vE '# guard:no-defensive-guess:ignore|// guard:no-defensive-guess:ignore' \
+      || true)"
     if [ -n "$hits" ]; then
       printf '❌ %s: speculative multi-fallback field access\n' "$file" >&2
       while IFS= read -r line; do

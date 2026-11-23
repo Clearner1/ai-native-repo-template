@@ -49,9 +49,11 @@ PATTERNS=(
   'expect\s*\(.*\.toString\(\)\)'      # JS/TS: expect(x.toString())
   'toBe\s*\(.*\.toString\(\)\)'        # Jest: .toBe(x.toString())
   'assert_eq!\s*\(.*to_string\(\)'     # Rust: assert_eq!(x.to_string(), ...)
+  'assert[[:space:]]+str[[:space:]]*\('  # Pytest: assert str(obj) == ...
+  'assert[[:space:]]+f"[^"]*{'            # Pytest f-string dump: assert f"{obj}"
 )
 
-SKIP_PATHS=('.git' 'node_modules' 'vendor' 'third_party' 'site' 'dist' 'build' '.agents' 'testdata')
+SKIP_PATHS=('.git' 'node_modules' 'vendor' 'third_party' 'site' 'dist' 'build' '.agents' 'testdata/should_fail')
 
 prune_args=()
 for skip in "${SKIP_PATHS[@]}"; do
