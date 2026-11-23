@@ -48,7 +48,7 @@ Whenever any active lesson reaches **`Seen 3×`** (3 distinct calendar days), pr
 
 1. **Promote the Rule**:
    - Add a crisp row to the appropriate table in `docs/code-standards.md` (Rule + What a reviewer looks at + sharpest evidence).
-   - If the pattern reveals a hidden cross-file coupling, also add a row to **Section 3 (Cross-Layer Change Checklists)** in `AGENTS.md`.
+   - If the pattern reveals a hidden cross-file coupling, also add a row to **Section 6 (Cross-Layer Change Checklists)** in `AGENTS.md`.
 2. **Evaluate Mechanical Guard Escalation**:
    Use the decision matrix below to decide whether prose is enough or a guard test is required:
 

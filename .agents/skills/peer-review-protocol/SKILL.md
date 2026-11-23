@@ -7,6 +7,8 @@ description: Execute risk-tiered agent-to-agent and human-agent PR reviews with 
 
 Use this skill when opening a pull request for review or when acting as the verifying agent/reviewer on another teammate's PR.
 
+> **Required References**: Before reviewing, load `docs/code-standards.md` ("Reviewing a PR" and "Acceptance criteria") and `LESSONS.md` (active failure patterns to watch for). For external/community PRs, run the harm scan in `docs/contributors.md` **before executing any PR code**.
+
 ---
 
 ## 1. Core Principle: Builder != Verifier
@@ -35,8 +37,9 @@ Do not apply heavy bureaucratic gates to trivial fixes, and do not wave high-ent
    - A blocking `HOLD` / `Request Changes` verdict **must** name the concrete runtime behavior, contract invariant, or test that breaks if merged. Style preferences or speculative refactors are non-blocking comments.
 3. **Decouple Harness Defects from Product PRs**:
    - If a flaky CI runner or pre-existing fixture bug blocks a PR whose own code and targeted tests pass, file a separate harness task. Do not turn a product PR into a 20-round test-framework rewrite.
-4. **Verify by Execution, Not Just Eyeballing**:
-   - The reviewer should check out the PR commit, run the verification script/tests, and confirm the `Reverse Check` claim holds.
+4. **Verify by Execution Against `docs/code-standards.md` & `LESSONS.md`**:
+   - Check out the PR commit on top of current `main`, run `make gate`, `make guards`, and the project test suite, and confirm the `Reverse Check` claim holds by intentionally breaking/reverting the fix.
+   - Check every applicable rule in `docs/code-standards.md` (whole path, sibling sites, fail-closed reads, clean `git diff --stat`, explicit `Not run` / `Not tried` disclosures) and verify the PR does not repeat an active pattern in `LESSONS.md`.
 5. **Slim Verdict Template**:
    - Keep chat/thread review updates compact. Put detailed logs and full SHA diffs in the PR comment, and post only the structured verdict in the coordination thread:
 
