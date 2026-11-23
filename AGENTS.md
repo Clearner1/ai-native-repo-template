@@ -19,15 +19,36 @@
 
 ---
 
-## 2. Unit & Integration Test Admission Bar
+## 2. Code Standards & Lessons
+
+Write and review changes against the [code standards](docs/code-standards.md). Rules there are graduated from real review experience.
+
+Before changing code, read [LESSONS.md](LESSONS.md): what recent merged work got wrong and the rule that would have caught it. A lesson seen on 3 or more separate review cycles moves into `docs/code-standards.md`.
+
+---
+
+## 3. Subsystem Design & Review
+
+Before changing a documented subsystem, read its [design reference](docs/subsystems/README.md) and verify the linked source. When preparing or reviewing a PR, follow the same page's documentation update, semantic change description, and review rules.
+
+---
+
+## 4. Community PRs
+
+Before reviewing a community PR, read [contributors](docs/contributors.md): what stops a review for possible harm, what is closed unreviewed, and the authors whose PRs require extra care.
+
+---
+
+## 5. Unit & Integration Test Admission Bar
 
 - **No Wall-Clock Sleeps**: Never use `sleep()` or assert elapsed wall-clock milliseconds in async tests. Inject virtual clocks or deterministic latches so tests never flake under load.
 - **No Mirror Assertions**: Assert structured domain properties and observable effects—never `toString()` dumps, raw log lines, or implementation-internal call order.
 - **Seam Collisions & Bug Clusters Mean Refactor**: If multiple agents repeatedly hit merge conflicts on the same file or bugs cluster in one module, stop patching—propose a boundary refactor and record an ADR in `docs/decisions/`.
+- **Guard Tests Enforce Invariants**: Structural invariants (every route registered, every string translated, no forbidden imports) are enforced by [guard tests](tests/guards/README.md) that read the codebase, not hand-maintained lists.
 
 ---
 
-## 3. Cross-Layer Change Checklists
+## 6. Cross-Layer Change Checklists
 
 Update this table whenever an incident reveals hidden coupling across files:
 
@@ -37,10 +58,12 @@ Update this table whenever an incident reveals hidden coupling across files:
 | User-visible behavior or CLI flags | `README.md` usage table + a new fragment in `change-logs/unreleased/changesets/`. |
 | Architectural boundary or rejected design | Add a concise ADR in `docs/decisions/NNNN-<slug>.md` capturing *why* and rejected alternatives. |
 | Any script under `scripts/` | Ensure every non-zero exit prints localized context + `Next action: <exact command>`. Run `make gate`. |
+| A subsystem's responsibilities, interfaces or state | Update the owning [subsystem reference](docs/subsystems/README.md) in the same PR. |
+| A structural invariant (new route, enum, field) | Verify the matching [guard test](tests/guards/README.md) passes. |
 
 ---
 
-## 4. On-Demand Skills Index (`.agents/skills/`)
+## 7. On-Demand Skills Index (`.agents/skills/`)
 
 Load the matching `SKILL.md` **before** starting the corresponding workflow:
 
@@ -52,10 +75,12 @@ Load the matching `SKILL.md` **before** starting the corresponding workflow:
 
 ---
 
-## 5. Fast Verification Commands
+## 8. Fast Verification Commands
 
 ```bash
 make gate                                    # Run repository governance, link, and changeset checks
+make test                                    # Run language test suite (wire your toolchain here)
+make mutate                                  # Run mutation testing (wire your tool here)
 make new-changeset SLUG=short-topic          # Scaffold a conflict-free changeset fragment
 make check-pr FILE=path/to/pr_description.md # Validate PR body before opening/updating a PR
 make worktree AGENT=alice TOPIC=fix-cache    # Create isolated worktree on branch agent/alice/fix-cache

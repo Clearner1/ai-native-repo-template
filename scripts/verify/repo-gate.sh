@@ -20,13 +20,19 @@ fail_with_next() {
 REQUIRED_FILES=(
   "README.md"
   "AGENTS.md"
+  "CLAUDE.md"
+  "LESSONS.md"
   "CODEOWNERS"
   ".github/AGENTS_GUIDE.md"
   ".github/pull_request_template.md"
   ".github/workflows/agent-governance-gate.yml"
   "docs/new-agent-landing.md"
+  "docs/code-standards.md"
+  "docs/contributors.md"
   "docs/contracts/0001-facts-vs-whims.md"
   "docs/decisions/0000-template.md"
+  "docs/subsystems/README.md"
+  "tests/guards/README.md"
   "change-logs/README.md"
 )
 
