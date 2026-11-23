@@ -4,7 +4,8 @@
 
 set -euo pipefail
 
-ROOT_DIR="$(git rev-parse --show-toplevel 2>/dev/null || (cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd))"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(git rev-parse --show-toplevel 2>/dev/null || (cd "${SCRIPT_DIR}/../.." && pwd))"
 cd "$ROOT_DIR"
 
 FAILURES=0
@@ -133,6 +134,26 @@ for script_path in ${VERIFY_SCRIPTS[@]+"${VERIFY_SCRIPTS[@]}"}; do
       "grep -n 'Error' '$script_path'  # append 'Next action: <exact command>' to failure outputs"
   fi
 done
+
+# 7. Validate LESSONS.md cursor, required sections, and 3x promotion threshold
+if [ -f "LESSONS.md" ]; then
+  LESSONS_CHECK_BIN=""
+  if [ -x "${SCRIPT_DIR}/lessons-check.sh" ]; then
+    LESSONS_CHECK_BIN="${SCRIPT_DIR}/lessons-check.sh"
+  elif [ -x "${ROOT_DIR}/scripts/verify/lessons-check.sh" ]; then
+    LESSONS_CHECK_BIN="${ROOT_DIR}/scripts/verify/lessons-check.sh"
+  fi
+
+  if [ -z "$LESSONS_CHECK_BIN" ]; then
+    fail_with_next \
+      "Missing executable 'scripts/verify/lessons-check.sh' required to validate LESSONS.md." \
+      "git checkout main -- scripts/verify/lessons-check.sh && chmod +x scripts/verify/lessons-check.sh && make gate"
+  else
+    if ! "$LESSONS_CHECK_BIN" --file "${ROOT_DIR}/LESSONS.md"; then
+      FAILURES=$((FAILURES + 1))
+    fi
+  fi
+fi
 
 if [ "$FAILURES" -gt 0 ]; then
   printf 'Gate failed with %d issue(s). Fix the items above using each Next action command.\n' "$FAILURES" >&2
