@@ -9,6 +9,15 @@ Use this skill **before** writing feature code. In an AI-native repository where
 
 ---
 
+## 0. Pre-Flight Standards & Lessons Check
+
+Before locking a contract or writing code:
+1. Read `LESSONS.md` for recent failure patterns in the area you are changing (e.g., defaults overriding user-set values, failed reads treated as empty, missed sibling or downstream callers).
+2. Review `docs/code-standards.md` ("What a change contains" and "Acceptance criteria") so scope boundaries, fail-closed semantics, and required verification are baked into the contract from the start.
+3. If the feature touches a documented subsystem, read its reference in `docs/subsystems/README.md` first.
+
+---
+
 ## 1. The Contract Triangle (PM -> Engineer -> Reviewer)
 
 Before opening a pull request for a non-trivial feature, lock a three-part contract in the task thread or issue:
@@ -49,8 +58,9 @@ Copy and fill out this block in your task thread or PR description:
   - Invariant: <what must never drift>
 - **Failure Modes**: <explicit error codes + trace ID surface>
 - **Verification Gate**:
-  - [ ] Command: `<exact test or check command>`
+  - [ ] Command: `<exact test or check command>` + `make gate` + `make guards`
   - [ ] Reverse check: `<how the test fails when the implementation is removed>`
+  - [ ] Standards & lessons checked: `docs/code-standards.md` & `LESSONS.md` reviewed (any `Not run` / `Not tried` gaps stated plainly)
 ```
 
 ---

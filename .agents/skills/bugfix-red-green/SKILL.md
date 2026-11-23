@@ -9,6 +9,17 @@ Use this skill whenever investigating a defect, fixing a regression, or adding b
 
 ---
 
+## 0. Pre-Flight Standards & Lessons Check
+
+Before writing a fix:
+1. Read `LESSONS.md` to check whether this failure class is already tracked—and if fixing a red test on `main`, search open issues by test name and read to the last comment so you build on any existing diagnosis or patch.
+2. Review `docs/code-standards.md` ("What a change contains" and "Tests"):
+   - Grep for every **sibling** of the bug (other handlers, branches, adapters, error hints) and fix the class in the same change.
+   - Use **real literal inputs** and cover **failure/unreadable paths**—never only synthetic happy-path fixtures.
+   - Keep tests **offline and sandboxed** (temp `HOME`, clean teardown of spawned processes/timers).
+
+---
+
 ## 1. Mandatory Red -> Green Reverse Verification
 
 Every bugfix or behavioral guard pull request must execute and record this exact sequence:
@@ -44,11 +55,15 @@ Every new or modified test case must satisfy these constraints:
 
 ---
 
-## 3. Mutation Check & Upstream Input Tightening
+## 3. Mutation Check, Guard Tests & Upstream Input Tightening
 
 1. **Verify the Test Suite with Mutation Testing (`make mutate`)**:
    - Passing tests can still leave behavior unpinned. On core domain modules, run mutation testing (`make mutate`) to flip conditions or delete branches and confirm no mutant survives silently.
-2. **Trace the Failure Upstream**:
+2. **Check Whether Guard Tests Need a New Guard (`tests/guards/`)**:
+   - Run `make guards` to ensure no existing repo-wide invariant was tripped (filtered runs like `-run`/`-k` skip cross-package guards).
+   - Ask whether this bug class could recur silently if a future agent forgets a text rule (e.g., forbidden stdlib call, unregistered route/enum, missing translation key, size budget, eager init). If mechanically checkable from source, add a codebase-reading guard under `tests/guards/` (or collocate it in the affected package per `tests/guards/README.md`).
+3. **Trace the Failure Upstream**:
    - Treat every agent or runtime bug as diagnostic evidence of an unclean upstream input:
      - Replace catch-all `else` / `default` branches with **compile-time exhaustive matching**.
-     - If the bug stemmed from a hidden cross-file coupling, add a row to **Section 3 (Cross-Layer Change Checklists)** in `AGENTS.md`.
+     - If the bug stemmed from a hidden cross-file coupling, add a row to **Section 6 (Cross-Layer Change Checklists)** in `AGENTS.md`.
+     - If the defect reveals a recurring pattern from merged work, record it in `LESSONS.md` during retrospective review (`lessons-retrospective`).

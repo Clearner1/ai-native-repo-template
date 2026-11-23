@@ -7,6 +7,8 @@ description: Enforce single-source-of-truth wire contracts, upstream SHA pinning
 
 Use this skill when adding or modifying API endpoints, shared schemas/DTOs, cross-repository interfaces, or developer/agent CLI scripts.
 
+> **Required References**: Before modifying contracts or parsers, review `docs/code-standards.md` ("External contracts come from the upstream source" and "A failed read, parse, or hash means 'unknown'") and `LESSONS.md` for recent upstream-drift or parsing failure patterns.
+
 ---
 
 ## 1. Single Contract Oracle (No Defensive Field Guessing)
@@ -45,5 +47,5 @@ Every script, linter, or CLI tool in `scripts/` is an interface consumed by agen
 ```text
 Error: Missing Reverse Check section in PR description or verification log.
 Code: MISSING_REVERSE_CHECK
-Next action: Fill in the '## Reverse Check (Red -> Green)' section in .github/PULL_REQUEST_TEMPLATE.md and re-run: ./scripts/verify/check-repo.sh
+Next action: Fill in the '## 4. Reverse Verification' section in .github/pull_request_template.md and re-run: ./scripts/verify/repo-gate.sh
 ```

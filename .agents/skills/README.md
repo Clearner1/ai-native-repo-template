@@ -12,5 +12,5 @@ Each subdirectory under `.agents/skills/<skill-name>/` contains a focused `SKILL
    description: <one-sentence trigger condition: when an agent must load this skill>
    ---
    ```
-3. **Register in `AGENTS.md`**: Every `.agents/skills/<skill-name>/SKILL.md` must be listed in Section 4 of `AGENTS.md` (`make gate` enforces this invariant).
+3. **Register in `AGENTS.md`**: Every `.agents/skills/<skill-name>/SKILL.md` must be listed in Section 7 of `AGENTS.md` (`make gate` enforces this invariant).
 4. **Actionable Outputs**: Include exact commands and pass/fail checklists rather than vague prose.

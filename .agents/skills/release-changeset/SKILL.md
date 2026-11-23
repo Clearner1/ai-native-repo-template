@@ -40,9 +40,12 @@ At release cut time, the release owner or Release Agent determines the version b
 - **Minor (`X.Y.0`)**: Cuts when `type: added` or `type: changed` fragments are present. Requires all CI gates green on `main` and staging smoke verification passing.
 - **Patch (`X.Y.Z`)**: Strictly reserved for production regressions (`type: fixed` or `type: security`) cherry-picked onto a release branch. No new features may ride in a patch release.
 - **Rollup Procedure**:
-  1. Move all fragments from `change-logs/unreleased/changesets/*.md` into `change-logs/<version>/changesets/`.
-  2. Compile `change-logs/<version>/RELEASE_NOTES.md` grouped by `added`, `changed`, `fixed`, and `security`.
-  3. Run `make gate` to verify all moved fragments satisfy the schema check.
+  1. Review `LESSONS.md` (release/verification lessons) and `docs/code-standards.md` ("Acceptance criteria" #7 — Release Verification): confirm CI finished green on the tagged commit (a cancelled run is not a pass), run `git fetch --tags` to prevent duplicate tags, verify the tag sits on `main`, and avoid standalone releases for test-only PRs.
+  2. Move all fragments from `change-logs/unreleased/changesets/*.md` into `change-logs/<version>/changesets/`.
+  3. Compile `change-logs/<version>/RELEASE_NOTES.md` grouped by `added`, `changed`, `fixed`, and `security`.
+  4. Run `make gate` and `make guards` to verify all moved fragments and repo invariants pass.
+  5. After tagging, verify every expected binary/package asset is actually published online and the newest version is marked `Latest` before announcing it—a tag alone is not a release.
+  6. If any post-release regression occurs, capture it in `LESSONS.md` via `lessons-retrospective`.
 
 ---
 
