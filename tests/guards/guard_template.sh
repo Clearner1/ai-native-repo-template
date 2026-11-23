@@ -80,7 +80,7 @@ combined_pattern="$(IFS='|'; printf '%s' "${PATTERNS[*]}")"
 
 for glob in "${ACTIVE_GLOBS[@]}"; do
   while IFS= read -r -d '' file; do
-    hits="$(grep -nEP "$combined_pattern" "$file" 2>/dev/null || true)"
+    hits="$(grep -nE "$combined_pattern" "$file" 2>/dev/null || true)"
     if [ -n "$hits" ]; then
       printf '❌ %s\n' "$file" >&2
       while IFS= read -r line; do

@@ -1,7 +1,7 @@
 # AX-Friendly Repository Entrypoints
 # Every command prints actionable errors with a `Next action:` recovery step.
 
-.PHONY: help gate check-pr new-changeset worktree test mutate
+.PHONY: help gate check-pr new-changeset worktree test mutate guards
 
 help:
 	@echo "Available targets:"
@@ -32,6 +32,9 @@ worktree:
 test:
 	@echo "Info: no language test suite configured yet. Wire your test runner in Makefile (target: test) and AGENTS.md."
 	@./scripts/verify/repo-gate.sh
+
+guards:
+	@bash tests/guards/run_all.sh
 
 mutate:
 	@echo "Info: wire your mutation testing tool here (e.g., cargo-mutants, mutmut, Stryker, pitest) for core domain modules."

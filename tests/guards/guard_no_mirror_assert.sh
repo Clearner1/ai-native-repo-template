@@ -63,7 +63,7 @@ FAILURES=0
 
 for glob in "${TEST_GLOBS[@]}"; do
   while IFS= read -r -d '' file; do
-    hits="$(grep -nEP "$combined" "$file" 2>/dev/null || true)"
+    hits="$(grep -nE "$combined" "$file" 2>/dev/null || true)"
     if [ -n "$hits" ]; then
       printf '❌ %s: mirror assertion (toString/str dump) in test\n' "$file" >&2
       while IFS= read -r line; do
