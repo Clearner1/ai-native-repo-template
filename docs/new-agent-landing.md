@@ -9,10 +9,16 @@ Welcome to the repository. Read this page once on your first session so you can 
 | Path | Role | Who Can Modify |
 | :--- | :--- | :--- |
 | `AGENTS.md` | Root constitution, Iron Rules, Cross-Layer Checklists & Skill Router | Human maintainers (`CODEOWNERS`) |
+| `CLAUDE.md` | Thin pointer for Claude Code (`@AGENTS.md @LESSONS.md`) | Human maintainers |
+| `LESSONS.md` | Living retrospective: lessons from merged work, 3× promotion pipeline | Agents + Humans (append lessons after reviews) |
 | `.agents/skills/*/SKILL.md` | On-demand step-by-step SOPs for common engineering workflows | Agents + Humans (must register in `AGENTS.md`) |
 | `.github/AGENTS_GUIDE.md` | Authoritative PR admission & peer-review protocol | Human maintainers (`CODEOWNERS`) |
+| `docs/code-standards.md` | Graduated rules from LESSONS.md: change scope, tests, acceptance, review | Human sign-off required |
+| `docs/contributors.md` | Community PR review protocol: harm scan, blocking criteria, credit | Human sign-off required |
 | `docs/contracts/` | Domain invariants, schema oracles & boundary rules | Human sign-off required (`CODEOWNERS`) |
 | `docs/decisions/` | Architecture Decision Records (Intent & Rejected Alternatives) | Every PR making a non-trivial design choice |
+| `docs/subsystems/` | Per-subsystem design references: responsibilities, paths, contracts | Same PR that changes the subsystem |
+| `tests/guards/` | Guard tests: structural invariants enforced by reading the codebase | Agents + Humans |
 | `change-logs/unreleased/changesets/` | Conflict-free per-PR release note fragments | Every PR with user/API/operational impact |
 | `scripts/verify/` | AX-designed verification scripts (`Next action:` on every failure) | Human sign-off required (`CODEOWNERS`) |
 
@@ -22,6 +28,8 @@ Welcome to the repository. Read this page once on your first session so you can 
 
 1. **Load Only Relevant Context**:
    - Read `AGENTS.md`, then read **only** the `.agents/skills/<skill>/SKILL.md` and `docs/contracts/*.md` files that apply to your task.
+   - Read `LESSONS.md` before changing code — learn from recent merged work's mistakes.
+   - Read the relevant [subsystem reference](subsystems/README.md) before changing a documented subsystem.
 2. **Isolate Your Worktree**:
    - Never edit directly on `main` or inside another agent's working tree:
      ```bash

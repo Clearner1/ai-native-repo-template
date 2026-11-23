@@ -26,6 +26,8 @@ This template shifts quality and trust upstream and into deterministic repositor
 ```text
 .
 ├── AGENTS.md                              # Root index: Iron Rules, cross-file checklists, test rules & skill router
+├── CLAUDE.md                              # Thin pointer for Claude Code: @AGENTS.md @LESSONS.md
+├── LESSONS.md                             # Living retrospective: lessons from merged work, promotion pipeline
 ├── CODEOWNERS                             # Hard human-approval gates on CI, migrations, contracts & security paths
 ├── Makefile                               # Standard AX-friendly entrypoints (`make gate`, `make new-changeset`, etc.)
 ├── .agents/
@@ -42,13 +44,20 @@ This template shifts quality and trust upstream and into deterministic repositor
 │       └── agent-governance-gate.yml      # Automated CI gate for structure, PR contract & sensitive-path alerts
 ├── docs/
 │   ├── new-agent-landing.md               # Day-1 onboarding map for a fresh human or agent teammate
+│   ├── code-standards.md                  # Graduated rules from LESSONS.md: change scope, tests, acceptance, review
+│   ├── contributors.md                    # Community PR review protocol: harm scan, blocking, credit
 │   ├── contracts/                         # Authoritative domain invariants & boundary contracts
 │   │   ├── README.md
 │   │   └── 0001-facts-vs-whims.md
-│   └── decisions/                         # Lightweight ADRs preserving Intent & Decision History
-│       ├── README.md
-│       ├── 0000-template.md
-│       └── 0001-adopt-agent-native-governance.md
+│   ├── decisions/                         # Lightweight ADRs preserving Intent & Decision History
+│   │   ├── README.md
+│   │   ├── 0000-template.md
+│   │   └── 0001-adopt-agent-native-governance.md
+│   └── subsystems/                        # Per-subsystem design references: responsibilities, paths, contracts
+│       └── README.md
+├── tests/
+│   └── guards/                            # Guard tests: structural invariants enforced by reading the codebase
+│       └── README.md
 ├── change-logs/
 │   ├── README.md                          # Conflict-free release note workflow
 │   └── unreleased/changesets/             # One markdown file per user-facing PR
