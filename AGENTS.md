@@ -2,6 +2,7 @@
 
 > **Read this file first.** Keep this root index concise (< 16 KB, enforced by `make gate`). Detailed workflows live in `.agents/skills/` and architectural invariants live in `docs/contracts/`. Load only what your current task requires.
 > New to this repository? Read [`docs/new-agent-landing.md`](docs/new-agent-landing.md) next.
+> Working in a **Raft multi-agent team**? Also read [`docs/raft-coordination.md`](docs/raft-coordination.md) for channel mute strategy and coordinator protocol.
 
 ---
 
