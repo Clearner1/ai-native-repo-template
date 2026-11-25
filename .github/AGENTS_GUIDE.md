@@ -28,6 +28,7 @@ Every pull request must populate `.github/pull_request_template.md` completely a
 - **Reverse Verification (`Red -> Green`)**:
   - For bugfixes, behavioral changes, and validation gates: paste the exact failing test/command output with the fix temporarily reverted (**RED**), followed by the passing output with the fix restored (**GREEN**).
   - For pure documentation/template scaffolding: mark `N/A (docs-only)` and paste `make gate` output.
+- **UI Screenshots**: For changes to a visible UI, embed screenshots of the affected screens and states in the PR body. Capture the running UI at the commit under review and identify the platform or viewport and commit SHA. Include before-and-after images for layout or appearance changes when the previous state exists. If a screen cannot be captured, state what is missing and why so the reviewer can decide whether to proceed. Use `N/A (no visible UI change)` for other PRs.
 - **Observability / Trace Square**: Name the structured trace span, metric, or log event that proves this path works in production (or `N/A` if non-runtime).
 
 ---

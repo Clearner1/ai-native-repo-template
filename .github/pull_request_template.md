@@ -26,3 +26,6 @@
 ## 5. Observability & Changeset Square
 - **Trace / Telemetry Signal**: <!-- Span, metric, error code with trace_id, or `N/A (non-runtime)` -->
 - **Changeset Fragment**: <!-- Path under `change-logs/unreleased/changesets/*.md` or `none (internal-only)` -->
+
+## 6. UI Screenshots
+<!-- For visible UI changes, embed screenshots from the commit under review. Label each screen/state, platform or viewport, and commit SHA. Show before and after for layout or appearance changes when a previous state exists. If a capture is unavailable, explain what is missing and why. If the PR has no visible UI change, enter N/A (no visible UI change). -->
