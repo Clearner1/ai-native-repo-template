@@ -95,8 +95,16 @@ To ensure agents cannot weaken the rules they are graded against, configure thes
 - **Require a pull request before merging**
   - Enable **Require review from Code Owners** (enforces human sign-off on `.github/`, `CODEOWNERS`, `scripts/verify/`, `docs/contracts/`, and `migrations/`).
   - Enable **Dismiss stale pull request approvals when new commits are pushed** (approvals bind strictly to a reviewed commit SHA).
-- **Require status checks to pass before merging**: require `governance-gate`.
+- **Require status checks to pass before merging**: select **Repository & PR Contract Gate** (the GitHub Actions check name, not the YAML job ID).
 - **Require merge queue** (recommended once parallel agent throughput exceeds ~20 PRs/week).
+
+### 4. Running CI and routing reviews
+
+The governance gate runs on every PR (including body edits) without path filters. In **Actions → Agent Governance Gate → Run workflow**, select a trusted branch to run the structure, guards and lessons checks without a PR. Only PR events validate a PR body.
+
+For expensive downstream tests, keep their workflow triggered on every PR. Detect changed paths in a job, run expensive jobs only when needed, and require one stable summary job with `if: always()` and `needs` on the detector and test jobs. The summary should pass only if detection succeeded and each required test succeeded (or was intentionally skipped by the detector). Fail on cancellations, failures and unexpected skips. Do not path-filter the entire required workflow: GitHub may leave the required check pending.
+
+**Review labels:** In a new repository, create `docs`, `ci` and `governance` under **Issues → Labels** before enabling the labeler. Edit [.github/labeler.yml](.github/labeler.yml) to match your layout. After the workflow lands on the default branch, open or update a PR touching both `README.md` and a workflow: it should gain `docs` and `ci`. Add a manual label and push another commit; the manual label should remain. Labeling is additive, so reviewers can remove stale labels themselves. Labels help route reviews; they neither set the risk tier nor replace CODEOWNERS approval.
 
 ---
 
