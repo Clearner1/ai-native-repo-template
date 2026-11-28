@@ -1,6 +1,7 @@
 name: Agent Governance Gate
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
   pull_request:
@@ -11,7 +12,7 @@ permissions:
   pull-requests: read
 
 concurrency:
-  group: governance-gate-${{ github.ref }}
+  group: governance-gate-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
